@@ -16,6 +16,14 @@ class RPN extends React.Component {
         this.keyinput = this.keyinput.bind(this);
     }
 
+    componentDidMount() {
+        window.addEventListener('keypress', this.keyinput);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('keypress', this.keyinput);
+    }
+
     clear() {
         this.setState(() => ({
             stack: [],
@@ -137,9 +145,10 @@ class RPN extends React.Component {
             case '.':
                 this.number('.');
                 break;
-            case 'tab':
-            case 'enter':
+            case 'Tab':
+            case 'Enter':
             case ' ':
+                event.preventDefault();
                 this.enter();
                 break;
             case '+':
@@ -158,8 +167,8 @@ class RPN extends React.Component {
             case 'c':
                 this.clear();
                 break;
-            case 'backspace':
-            case 'delete':
+            case 'Backspace':
+            case 'Delete':
                 this.delete();
                 break;
             default:
@@ -170,8 +179,8 @@ class RPN extends React.Component {
     render() {
         return (
             <div onKeyPress={this.keyinput}>
-                <div>{this.state.stack.join(' ') + (this.state.inputNumber ? ' ' + this.state.inputNumber : '')}</div>
                 <div className='grid-container'>
+                    <div className='stack'><span>{this.state.stack.join(' ') + (this.state.inputNumber ? ' ' + this.state.inputNumber : '')}</span></div>
                     <div className='number' id='one' onClick={() => this.number('1')}>1</div>
                     <div className='number' id='two' onClick={() => this.number('2')}>2</div>
                     <div className='number' id='three' onClick={() => this.number('3')}>3</div>
